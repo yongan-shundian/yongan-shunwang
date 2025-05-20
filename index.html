@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>永安順王宮</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Noto Serif TC", serif;
+    }
+
+    #cover {
+      height: 100vh;
+      background: linear-gradient(#f5e9d3, #f2dfc2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      border: 20px solid #8b0000;
+    }
+
+    #cover h1 {
+      color: #8b0000;
+      font-size: 2.5em;
+      text-shadow: 1px 1px 3px #00000033;
+      margin-bottom: 20px;
+    }
+
+    #enterButton {
+      background-color: #c69c6d;
+      color: #000;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 2px 2px 5px #888;
+      cursor: pointer;
+    }
+
+    #main {
+      display: none;
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+      border: 20px solid #8b0000;
+      border-top: 0;
+      background: linear-gradient(#f5e9d3, #f2dfc2);
+    }
+
+    .sidebar {
+      background: #fef2d0;
+      border-right: 5px solid gold;
+      padding: 20px;
+      width: clamp(180px, 25%, 220px); /* 在不同螢幕間自動調整 */
+    }
+
+    .sidebar button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      background-color: #a30000;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    .content {
+      flex-grow: 1;
+      padding: 40px;
+      background-color: white;
+      position: relative;
+    }
+
+    .content h2 {
+      color: #a37000;
+      margin-bottom: 10px;
+    }
+
+    .content p {
+      color: #333;
+      font-size: 1.1em;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .back-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #c69c6d;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+  /* 文宣區 */
+  .section-preview {
+  position: relative;
+  padding-bottom: 50px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f0e3;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(120, 0, 0, 0.2);
+}
+
+.section-preview ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.section-preview h3 {
+  color: #800000;
+  margin-bottom: 10px;
+}
+
+.section-preview button {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+}
+
+.scroll-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 50px 0;
+}
+
+.scroll-roll {
+  position: relative;
+  background: linear-gradient(to right, #c2a77f 0%, #f5ecd9 15%, #f5ecd9 85%, #c2a77f 100%);
+  border-top: 4px solid #8b5e3c;
+  border-bottom: 4px solid #8b5e3c;
+  padding: 40px 60px;
+  width: 80%;
+  max-width: 800px;
+  overflow: hidden;
+  font-family: "標楷體", serif;
+  animation: openScroll 1.5s ease-out;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+
+/* 卷軸動畫：左右打開 */
+@keyframes openScroll {
+  from {
+    clip-path: inset(0 50% 0 50%);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* 卷軸兩側仿邊框裝飾 */
+.scroll-roll::before,
+.scroll-roll::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 30px;
+  height: 100%;
+  background: radial-gradient(circle, #a77b54 40%, #8b5e3c 60%);
+  border-left: 3px solid #5c3a1a;
+  border-right: 3px solid #5c3a1a;
+}
+
+.scroll-roll::before {
+  left: 0;
+}
+
+.scroll-roll::after {
+  right: 0;
+}
+
+/* 文字樣式 */
+.scroll-roll h2 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #7b2d1d;
+}
+
+.scroll-roll ul {
+  list-style: none;
+  padding: 0;
+  font-size: 18px;
+  line-height: 2;
+  color: #3c2f23;
+}
+
+/* 相關商品 */
+.same-background {
+  background-color: #fef8ee; /* 跟首頁一樣的背景色 */
+  font-family: 'Noto Serif TC', serif;
+  padding: 20px;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.navigation-buttons .btn {
+  background-color: #c0392b;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 6px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+.product-detail img {
+  width: 300px;
+  border-radius: 10px;
+}
+
+.product-detail {
+  max-width: 600px;
+  margin: auto;
+}
+
+.product-section {
+  background-color: #fef8ee; /* 與首頁一致的淺米色 背景*/
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.product-section h2 {
+  font-size: 30px;
+  margin-bottom: 40px;
+  color: #7b2d1d;
+  font-family: "標楷體", serif;
+}
+
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.product-card {
+  background: #fffaf0;
+  border: 2px solid #e2cba3;
+  border-radius: 12px;
+  width: 260px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: scale(1.03);
+}
+
+.product-card img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 15px;
+  text-align: left;
+}
+
+.product-info h3 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  color: #7b2d1d;
+}
+
+.product-info p {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.price {
+  font-weight: bold;
+  color: #b04020;
+}
+
+/* 交通資訊 */
+/* 調整 .page 區塊的整體樣式 */
+.page {
+  display: none; /* 保留你的顯示控制 */
+  max-width: 1000px;   /* 限制最大寬度，不會太寬 */
+  margin: 0 auto;      /* 置中 */
+  padding: 40px 20px;  /* 上下左右內距 */
+  box-sizing: border-box;
+  background-color: #fff; /* 可選，加白底更清楚 */
+  border-radius: 8px;      /* 可選，加一點圓角 */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* 可選，讓區塊有點立體感 */
+}
+
+.page h2 {
+  font-size: 28px;
+  color: #800000; /* 深紅色 */
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.page h3 {
+  font-size: 20px;
+  margin-top: 25px;
+  color: #a0522d; /* 土棕色 */
+}
+
+/* 可選：交通資訊內容區域加些美化 */
+#traffic h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+}
+
+#traffic p, #traffic li {
+  line-height: 1.8;
+  font-size: 18px;
+}
+
+#traffic {
+  background-color: #fff6e6;   /* 柔和亮色底 */
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);  /* 微陰影讓它浮起來 */
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+/* 功德流芳 */
+    h1, h2 {
+      color: #a00;
+      text-align: center;
+    }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    h2 {
+      font-size: 22px;
+      margin-top: 30px;
+    }
+    p {
+      line-height: 1.8;
+      font-size: 18px;
+    }
+    .highlight {
+      color: #a00;
+      font-weight: bold;
+    }
+    .donation-info {
+      background-color: #fff5e1;
+      border-left: 6px solid #d4af37;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 6px;
+    }
+    .footer {
+      margin-top: 40px;
+      font-size: 16px;
+      text-align: center;
+      color: #777;
+    }
+
+  .scroll-wrapper {
+      display: flex;
+      align-items: center;
+      background-color: transparent;
+      padding: 20px;
+    }
+
+    .scroll-end {
+      width: 20px;
+      height: 400px;
+      background: linear-gradient(#a00, #f60);
+      border-radius: 10px;
+      margin: 0 10px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .scroll-body {
+      background: linear-gradient(to bottom, #fffbea, #f9e9c6);
+      width: 250px;
+      height: 400px;
+      border: 4px solid #d4af37;
+      border-left: none;
+      border-right: none;
+      box-shadow: inset 0 0 10px #d4af37;
+      padding: 20px 10px;
+      overflow-y: auto;
+      writing-mode: vertical-rl;
+      text-align: center;
+      font-size: 20px;
+      color: #800000;
+      white-space: nowrap;
+    }
+
+    .donor {
+      margin-bottom: 20px;
+    }
+/* 活動剪影 */
+    .carousel {
+      max-width: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+    .carousel img {
+      width: 100%;
+      display: none;
+    }
+    .carousel img.active {
+      display: block;
+    }
+    .section {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+    .timeline {
+      border-left: 3px solid #333;
+      padding-left: 1rem;
+    }
+    .timeline div {
+      margin: 1rem 0;
+    }
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 5px solid gold;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .product-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .product-card {
+    width: 90%;
+  }
+
+  .scroll-roll {
+    padding: 20px;
+  }
+
+  .navigation-buttons {
+    justify-content: center;
+  }
+}
+
+  </style>
+</head>
+
+<body>
+
+  <!-- 封面 -->
+  <div id="cover">
+    <h1>歡迎來到永安順王宮</h1>
+    <button id="enterButton">進 入 網 站</button>
+  </div>
+
+  <!-- 首頁與其他頁面 -->
+  <div id="main">
+    <div class="container">
+      <div class="sidebar">
+        <button onclick="showPage('news')">即時消息</button>
+        <button onclick="showPage('promo')">文宣區</button>
+        <button onclick="showPage('gallery')">活動剪影</button>
+        <button onclick="showPage('team')">人員名單</button>
+        <button onclick="showPage('services')">服務項目</button>
+        <button onclick="showPage('products')">相關商品</button>
+        <button onclick="showPage('donate')">功德流芳</button>
+        <button onclick="showPage('discussion')">留言討論</button>
+        <button onclick="showPage('transport')">交通資訊</button>
+        <button onclick="showPage('contact')">聯絡我們</button>
+      </div>
+      <div class="content">
+        <!-- 首頁 -->
+        <div id="home" class="page" style="display: block;">
+          <h2>歡迎光臨 永安順王宮</h2>
+          <p>請透過左側選單探索本網站，了解更多關於神明文化與永安順王的事蹟。</p>
+        </div>
+
+        <!-- 以下是各頁面區塊 -->
+        <div id="news" class="page">
+          <h2>即時消息</h2>
+          <p>這裡是即時消息的內容區塊。</p>
+          <button class="back-button" onclick="showPage('home')">回首頁</button>
+        </div>
+
+        <!-- 文宣區 -->
+<div id="promo" class="page">
+  <h2>文宣區</h2>
+  
+  <div class="section-preview">
+    <h3>文章預覽</h3>
+    <ul>
+      <li><strong>信仰與生活的連結：</strong> 信仰不只是儀式，更是日常的修養與行為準則...</li>
+      <li><strong>廟會的文化意涵：</strong> 每年的廟會活動不僅是熱鬧，更展現地方人文的凝聚力...</li>
+    </ul>
+    <button onclick="showPage('article')">查看更多文章</button>
+  </div>
+
+  <div class="section-preview">
+    <h3>經典箴言預覽</h3>
+    <ul>
+      <li>「善惡有報，天理昭昭。」</li>
+      <li>「心誠則靈，敬神如在。」</li>
+    </ul>
+    <button onclick="showPage('quotes')">查看更多箴言</button>
+  </div>
+
+  <button class="back-button" onclick="showPage('home')">回首頁</button>
+</div>
+
+
+      <!-- 文章區 -->
+<div id="article" class="page">
+  <h2>文章區</h2>
+  <article>
+    <h3>信仰與生活的連結</h3>
+    <p>信仰不僅是儀式的參與，更是心靈的依靠。透過日常的修行與善行，信仰轉化為我們的行為準則與處世之道。</p>
+  </article>
+  <article>
+    <h3>廟會的文化意涵</h3>
+    <p>廟會活動融合了宗教、民俗與社會互動，是文化傳承的重要方式，也反映出社區間的團結與敬神之心。</p>
+  </article>
+  <article>
+    <h3>神明信仰的由來</h3>
+    <p>永安順王信仰源於地方歷史傳說，神明以慈悲為懷，庇佑地方居民，經年累月形成今日的香火盛況。</p>
+  </article>
+  
+  <button class="back-button" onclick="showPage('promo')">回文宣區</button>
+  <button class="back-button" onclick="showPage('home')">回首頁</button>
+</div>
+
+
+       <!-- 經典箴言區 -->
+<div id="quotes" class="page">
+  <h2>經典箴言</h2>
+  <ul>
+    <li>「善惡有報，天理昭昭。」</li>
+    <li>「行善積德，福報自來。」</li>
+    <li>「心誠則靈，敬神如在。」</li>
+    <li>「勿以善小而不為，勿以惡小而為之。」</li>
+    <li>「敬天愛人，處世有道。」</li>
+  </ul>
+  
+  <button class="back-button" onclick="showPage('promo')">回文宣區</button>
+  <button class="back-button" onclick="showPage('home')">回首頁</button>
+</div>
+
+        <div id="gallery" class="page">
+          <h2>活動剪影</h2>
+  <div class="carousel" id="carousel">
+    <img src="img/photo1.jpg" class="active" alt="活動剪影1">
+    <img src="img/photo2.jpg" alt="活動剪影2">
+    <img src="img/photo3.jpg" alt="活動剪影3">
+  </div>
+
+  <section class="section">
+    <h2>活動介紹</h2>
+    <p>永安順王祭典是地方重要的民俗文化活動，包含迎王、繞境、安座等莊嚴儀式，凝聚社區信仰與文化傳承。</p>
+  </section>
+
+  <section class="section">
+    <h2>活動時間軸</h2>
+    <div class="timeline">
+      <div><strong>2025/03/01</strong> — 活動籌備會議</div>
+      <div><strong>2025/04/10</strong> — 安座儀式</div>
+      <div><strong>2025/04/15</strong> — 繞境遶境行程</div>
+      <div><strong>2025/04/20</strong> — 送王儀式</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2>活動影片</h2>
+    <iframe src="https://www.youtube.com/embed/影片ID" allowfullscreen></iframe>
+  </section>
+
+  <section class="section">
+    <h2>精彩剪影</h2>
+    <div class="gallery">
+      <img src="img/photo4.jpg" alt="活動剪影4">
+      <img src="img/photo5.jpg" alt="活動剪影5">
+      <img src="img/photo6.jpg" alt="活動剪影6">
+      <img src="img/photo7.jpg" alt="活動剪影7">
+    </div>
+  </section>
+          <button class="back-button" onclick="showPage('home')">回首頁</button>
+        </div>
+
+  <div id="team" class="page">
+  <div class="scroll-container">
+  <div class="scroll-roll">
+    <h2>人員名單</h2>
+    <ul>
+      <li>理事長：邱宏睿</li>
+      <li>副理事長：邱湘凌、王乙安</li>
+      <li>總幹事：劉芷芸</li>
+      <li>秘書：邱湘嵐</li>
+      <li>藝術總監：邱湘庭</li>
+    </ul>
+      </div> <!-- scroll-roll 結束 -->
+  </div> <!-- scroll-container 結束 -->
+  <button class="back-button" onclick="showPage('home')">回首頁</button>
+  </div>
+
+        <div id="services" class="page">
+          <h2>服務項目</h2>
+  <div style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; text-align: center;">
+    <div style="flex: 1 1 250px; max-width: 300px;">
+      <img src="img/icon1.png" alt="服務1" style="width: 80px; height: 80px;">
+      <h3>廟會策劃</h3>
+      <p>提供傳統祭典活動完整企劃與執行，結合地方文化與信仰。</p>
+    </div>
+    <div style="flex: 1 1 250px; max-width: 300px;">
+      <img src="img/icon2.png" alt="服務2" style="width: 80px; height: 80px;">
+      <h3>攝影紀錄</h3>
+      <p>活動全程專業拍攝，記錄每一個莊嚴瞬間。</p>
+    </div>
+    <div style="flex: 1 1 250px; max-width: 300px;">
+      <img src="img/icon3.png" alt="服務3" style="width: 80px; height: 80px;">
+      <h3>文化導覽</h3>
+      <p>專人導覽地方信仰歷史與王船祭典內涵，促進文化理解。</p>
+    </div>
+  </div>
+</section>
+          <button class="back-button" onclick="showPage('home')">回首頁</button>
+        </div>
+
+<div id="products" class="page">
+<section class="product-section">
+ <h2>相關商品</h2>
+  <div class="product-grid">
+      <a href="product-detail.html?product=1" class="product-card">
+  <img src="商品圖片1.jpg" alt="商品1">
+  <div class="product-info">
+    <h3>祈福香包</h3>
+    <p>手工製作，內含平安符與香草。</p>
+    <span class="price">NT$150</span>
+  </div>
+</a>
+
+      <a href="product-detail.html?product=2" class="product-card">
+  <img src="商品圖片2.jpg" alt="商品2">
+  <div class="product-info">
+    <h3>結緣福袋</h3>
+    <p>內含加持小物與祝福語卡，適合贈送親友。</p>
+    <span class="price">NT$150</span>
+  </div>
+</a>
+
+      <a href="product-detail.html?product=3" class="product-card">
+  <img src="商品圖片3.jpg" alt="商品3">
+  <div class="product-info">
+    <h3>新年紅包袋</h3>
+    <p>象徵好運與護佑的小紅線，可繫於手腕或包包。</p>
+    <span class="price">NT$150</span>
+  </div>
+</a>
+<a href="product-detail.html?product=4" class="product-card">
+  <img src="商品圖片4.jpg" alt="商品3">
+  <div class="product-info">
+    <h3>Line貼圖</h3>
+    <p>象徵好運與護佑的小紅線，可繫於手腕或包包。</p>
+    <span class="price">NT$150</span>
+  </div>
+</a>
+    </div>
+    <button class="back-button" onclick="showPage('home')">回首頁</button>
+    </section>
+</div>
+    
+<div id="donate" class="page">
+  
+  <h2>功德流芳</h2>
+    <h3>永安順王宮建廟募款</h3>
+    <p>
+      永安順王，奉天承運，顯化於世，以正神之尊弘揚「忠、孝、仁、義、禮、智、信」之德行，致力於導正人心、護佑蒼生。
+    </p>
+    <p>
+      本宮秉持神意，啟動建廟工程，立壇奉祀，並結合
+      <span class="highlight">零識天極光教育</span>理念，推廣身心靈修養與傳統禮教，讓信仰與文化並行，引領人心向善。
+    </p>
+
+    <div class="donation-info">
+      <h3>📌 募款資訊</h3>
+      <p><span class="highlight">工程方向：</span>設立神壇、文化講堂、信仰推廣空間</p>
+      <p><span class="highlight">募款目標：</span>NT$30,000</p>
+      <p><span class="highlight">募款期間：</span>即日起至中秋節（農曆八月十五）</p>
+      <p><span class="highlight">功德登錄：</span>所有捐款人芳名將列入「贊助功德名冊」，永久存留，世代敬仰</p>
+    </div>
+
+    <h3>🙏 與我們一同奠基光明</h3>
+    <p>
+      永安順王宮不僅是一座神明的聖壇，更是傳承忠孝禮教的教育基地。
+      我們誠摯邀請您參與建廟工程，為信仰立根，為文化續脈，為社會種下善的種子。
+    </p>
+
+    <div class="footer">
+      永安順王宮建廟籌備委員會 敬啟
+    </div>
+
+    <div class="scroll-wrapper">
+    <div class="scroll-end"></div>
+    <div class="scroll-body" id="donorList">
+      <!-- JS 會插入資料 -->
+    </div>
+    <div class="scroll-end"></div>
+  </div>
+
+  <button class="back-button" onclick="showPage('home')">回首頁</button>
+  </div>
+  
+
+  <div id="discussion" class="page">
+   <h2>留言討論</h2>
+    <p>信眾留言、心得與交流專區。</p>
+    <h3>線上留言</h3>
+  <form>
+    <label for="name">姓名：</label><br>
+    <input type="text" id="name" name="name" required><br><br>
+
+    <label for="email">Email：</label><br>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="message">留言內容：</label><br>
+    <textarea id="message" name="message" rows="5" required></textarea><br><br>
+
+    <button type="submit">送出留言</button>
+  </form>
+  <button class="back-button" onclick="showPage('home')">回首頁</button>
+</div>
+
+  <div id="transport" class="page">
+  <h2>交通資訊</h2>
+  <p>歡迎前來本殿參拜，以下為交通方式說明：</p>
+  
+  <h3>地址</h3>
+  <p>台灣台北市北投區溫泉路83-1號（永安順王宮）</p>
+
+  <h3>大眾運輸</h3>
+  <ul>
+    <li><strong>公車：</strong>搭乘xx號至「xx站」，步行約5分鐘即可抵達</li>
+    <li><strong>捷運：</strong>至新北投站下車，步行約10分鐘即可抵達</li>
+  </ul>
+
+  <h3>自行開車</h3>
+  <p>可導航至「永安順王宮」，本宮周邊設有停車場，方便停車。</p>
+
+  <h3>地圖導航</h3>
+  
+  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3612.0073370370287!2d121.5062089!3d25.135442800000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442ae5b2d147d39%3A0x650b342839164c63!2zMTEy5Y-w5YyX5biC5YyX5oqV5Y2A5rqr5rOJ6LevODMtMeiZnw!5e0!3m2!1szh-TW!2stw!4v1747405229129!5m2!1szh-TW!2stw" 
+  width="600" 
+  height="450" 
+  style="border:0;" 
+  allowfullscreen="" 
+  loading="lazy" 
+  referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
+  <button class="back-button" onclick="showPage('home')">回首頁</button>
+</div>
+
+
+
+  <div id="contact" class="page">
+  <h2>聯絡我們</h2>
+  <p>若您有任何疑問、建議，或想參與本殿活動，歡迎透過以下方式聯繫我們：</p>
+
+  <h3>聯絡資訊</h3>
+  <ul>
+    <li><strong>電話：</strong>02-8921-3458</li>
+    <li><strong>Email：</strong>lan029432@gmail.com</li>
+    <li><strong>地址：</strong>台北市北投區溫泉路83-1號</li>
+    <li><strong>開放時間：</strong>每日 08:00–20:00</li>
+  </ul>
+  <button class="back-button" onclick="showPage('home')">回首頁</button>
+  </div>
+   
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("enterButton").addEventListener("click", function () {
+      document.getElementById("cover").style.display = "none";
+      document.getElementById("main").style.display = "block";
+    });
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(page => {
+    page.style.display = 'none';
+  });
+  document.getElementById(id).style.display = 'block';
+}
+
+    const donors = [
+      { name: '曾祥妹', amount: '捌百元' },
+      { name: '吳紅梅', amount: '壹仟元' },
+      { name: '李伯偉', amount: '壹仟元' },
+      { name: '邱湘嵐', amount: '壹仟元' },
+    ];
+
+    const donorList = document.getElementById("donorList");
+    donors.forEach(donor => {
+      const entry = document.createElement("div");
+      entry.className = "donor";
+      entry.textContent = `${donor.name}　${donor.amount}`;
+      donorList.appendChild(entry);
+    });
+ 
+        let current = 0;
+    const images = document.querySelectorAll('#carousel img');
+    setInterval(() => {
+      images[current].classList.remove('active');
+      current = (current + 1) % images.length;
+      images[current].classList.add('active');
+    }, 3000);
+   
+  </script>
+
+</body>
+</html>

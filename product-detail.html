@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商品詳情</title>
+  <style>
+    body {
+      background: #fefaf4;
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    .product-detail {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    img {
+      max-width: 100%;
+      border-radius: 12px;
+      height: auto;
+    }
+    .nav-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+    form {
+      margin-top: 30px;
+      border-top: 1px solid #ccc;
+      padding-top: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      margin-top: 15px;
+      background: #b88b4a;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #a97a3a;
+    }
+
+    @media (max-width: 600px) {
+  .product-detail {
+    padding: 15px;
+  }
+
+  input, select {
+    font-size: 16px;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .nav-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav-buttons a {
+    text-align: center;
+  }
+}
+
+  </style>
+</head>
+<body>
+  <div class="product-detail">
+    <h2 id="product-name">商品名稱</h2>
+    <img id="product-image" src="" alt="商品圖片">
+    <p id="product-price">價格</p>
+    <p id="product-desc">商品說明</p>
+
+    <form id="reserve-form">
+      <h3>預定此商品</h3>
+
+      <label for="name">姓名</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="phone">電話</label>
+      <input type="tel" id="phone" name="phone" required>
+
+      <label for="date">預定日期</label>
+      <input type="date" id="date" name="date" required>
+
+      <label for="product-select">商品名稱</label>
+      <select id="product-select" name="product">
+        <!-- JS 動態填入 -->
+      </select>
+
+      <button type="submit">送出預定</button>
+    </form>
+
+    <div class="nav-buttons">
+      <a href="index.html#home">回首頁</a>
+      <a href="index.html#product-section">回商品區</a>
+    </div>
+  </div>
+
+  <script>
+    const products = {
+      1: {
+        name: "祈福香包",
+        price: "$100",
+        desc: "祈求平安健康的天然手工香品。",
+        image: "img/product1.jpg"
+      },
+      2: {
+        name: "結緣福袋",
+        price: "$150",
+        desc: "內含加持小物與祝福語卡，適合贈送親友。",
+        image: "img/product2.jpg"
+      },
+      3: {
+        name: "祈福紅線",
+        price: "$50",
+        desc: "象徵好運與護佑的小紅線，可繫於手腕或包包。",
+        image: "img/product3.jpg"
+      }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get("product");
+
+    if (products[productId]) {
+      const p = products[productId];
+      document.getElementById("product-name").textContent = p.name;
+      document.getElementById("product-price").textContent = "價格：" + p.price;
+      document.getElementById("product-desc").textContent = p.desc;
+      document.getElementById("product-image").src = p.image;
+
+      // 預設選項填入
+      const select = document.getElementById("product-select");
+      Object.entries(products).forEach(([id, product]) => {
+        const option = document.createElement("option");
+        option.value = product.name;
+        option.textContent = product.name;
+        if (id === productId) option.selected = true;
+        select.appendChild(option);
+      });
+    } else {
+      document.querySelector(".product-detail").innerHTML = "<p>找不到該商品。</p>";
+    }
+
+    // 處理表單送出
+    document.getElementById("reserve-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const date = document.getElementById("date").value;
+      const product = document.getElementById("product-select").value;
+
+      alert(`已送出預定：\n姓名：${name}\n電話：${phone}\n日期：${date}\n商品：${product}`);
+      
+      // TODO: 可在這裡整合 EmailJS 寄信功能
+    });
+  </script>
+</body>
+</html>
