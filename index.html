@@ -50,12 +50,30 @@
       background: linear-gradient(#f5e9d3, #f2dfc2);
     }
 
-    .sidebar {
-      background: #fef2d0;
-      border-right: 5px solid gold;
-      padding: 20px;
-      width: clamp(180px, 25%, 220px); /* 在不同螢幕間自動調整 */
+    .menu-button {
+      background: #333;
+      color: #fff;
+      padding: 10px;
+      cursor: pointer;
     }
+
+    .sidebar {
+  width: clamp(180px, 25%, 220px);  /* 響應式寬度 */
+  background: #fef2d0;              /* 明亮背景色 */
+  border-right: 5px solid gold;     /* 美觀邊框 */
+  padding: 20px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  transition: transform 0.3s ease;
+  transform: translateX(0);         /* 預設展開 */
+}
+
+.sidebar.hidden {
+  transform: translateX(-100%);     /* 收起狀態 */
+}
+
 
     .sidebar button {
       width: 100%;
@@ -462,6 +480,8 @@ img {
     width: 100%;
     border-right: none;
     border-bottom: 5px solid gold;
+    transform: translateX(-100%);
+    position: absolute;
   }
 
   .content {
@@ -500,6 +520,7 @@ img {
   <!-- 首頁與其他頁面 -->
   <div id="main">
     <div class="container">
+    <div class="menu-button" onclick="toggleSidebar()">☰ 功能選單</div>  
       <div class="sidebar">
         <button onclick="showPage('news')">即時消息</button>
         <button onclick="showPage('promo')">文宣區</button>
@@ -604,8 +625,8 @@ img {
   <section class="section">
     <h2>活動時間軸</h2>
     <div class="timeline">
-      <div><strong>2025/03/01</strong> — 活動籌備會議</div>
-      <div><strong>2025/04/10</strong> — 安座儀式</div>
+      <div><strong>2025/03/01</strong> — 蛻變為永安順王</div>
+      <div><strong>2025/04/10</strong> — 迎神儀式</div>
       <div><strong>2025/04/15</strong> — 繞境遶境行程</div>
       <div><strong>2025/04/20</strong> — 送王儀式</div>
     </div>
@@ -747,7 +768,6 @@ img {
     </div>
     <div class="scroll-end"></div>
   </div>
-
   <button class="back-button" onclick="showPage('home')">回首頁</button>
   </div>
   
@@ -798,9 +818,7 @@ img {
   referrerpolicy="no-referrer-when-downgrade">
   </iframe>
   <button class="back-button" onclick="showPage('home')">回首頁</button>
-</div>
-
-
+  </div>
 
   <div id="contact" class="page">
   <h2>聯絡我們</h2>
@@ -815,7 +833,7 @@ img {
   </ul>
   <button class="back-button" onclick="showPage('home')">回首頁</button>
   </div>
-   
+  
       </div>
     </div>
   </div>
