@@ -50,24 +50,12 @@
       background: linear-gradient(#f5e9d3, #f2dfc2);
     }
 
-  .sidebar {
-  background-color: #a00;
-  color: white;
-  width: 220px;
-  padding: 10px;
-  transition: transform 0.3s ease;
-  overflow-y: auto;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-}
-
-.sidebar li {
-  margin: 10px 0;
-  cursor: pointer;
-}
+    .sidebar {
+      background: #fef2d0;
+      border-right: 5px solid gold;
+      padding: 20px;
+      width: 220px;
+    }
 
     .sidebar button {
       width: 100%;
@@ -526,9 +514,6 @@ img {
 
   <!-- 首頁與其他頁面 -->
   <div id="main">
-    <header>
-      <button id="toggleSidebar">☰ 功能選單</button>
-    </header>
     <div class="container">  
       <div class="sidebar">
         <button onclick="showPage('news')">即時消息</button>
@@ -853,30 +838,12 @@ img {
       document.getElementById("main").style.display = "block";
     });
 
-const toggleButton = document.getElementById('toggleSidebar');
-const sidebar = document.getElementById('sidebar');
 
-function toggleSidebar() {
-  const isMobile = window.innerWidth <= 768;
-  if (isMobile) {
-    sidebar.classList.toggle('active');
-  } else {
-    sidebar.classList.toggle('collapsed');
-  }
-}
-
-toggleButton.addEventListener('click', toggleSidebar);
-
-
-function showPage(pageId) {
-  document.querySelectorAll('.page').forEach(page => {
-    page.style.display = 'none';
-  });
-  const targetPage = document.getElementById(pageId);
-  if(targetPage) {
-   targetPage.style.display = 'block';
-  }
-}
+    function showPage(pageId) {
+      const pages = document.querySelectorAll('.page');
+      pages.forEach(p => p.style.display = 'none');
+      document.getElementById(pageId).style.display = 'block';
+    }
 
     const donors = [
       { name: '曾祥妹', amount: '捌百元' },
