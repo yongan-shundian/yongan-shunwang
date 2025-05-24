@@ -50,13 +50,17 @@
       background: linear-gradient(#f5e9d3, #f2dfc2);
     }
 
-  .sidebar {
-  background-color: #a00;
-  color: white;
-  width: 220px;
-  padding: 10px;
+   .sidebar {
+  width: clamp(180px, 25%, 220px);  /* 響應式寬度 */
+  background: #fef2d0;              /* 明亮背景色 */
+  border-right: 5px solid gold;     /* 美觀邊框 */
+  padding: 20px;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
   transition: transform 0.3s ease;
-  overflow-y: auto;
+  transform: translateX(0);         /* 預設展開 */
 }
 
 .sidebar ul {
