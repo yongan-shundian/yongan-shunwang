@@ -868,11 +868,14 @@ function toggleSidebar() {
 toggleButton.addEventListener('click', toggleSidebar);
 
 
-function showPage(id) {
+function showPage(pageId) {
   document.querySelectorAll('.page').forEach(page => {
     page.style.display = 'none';
   });
-  document.getElementById(id).style.display = 'block';
+  const targetPage = document.getElementById(pageId);
+  if(targetPage) {
+   targetPage.style.display = 'block';
+  }
 }
 
     const donors = [
