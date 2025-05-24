@@ -50,30 +50,24 @@
       background: linear-gradient(#f5e9d3, #f2dfc2);
     }
 
-    .menu-button {
-      background: #333;
-      color: #fff;
-      padding: 10px;
-      cursor: pointer;
-    }
-
-    .sidebar {
-  width: clamp(180px, 25%, 220px);  /* 響應式寬度 */
-  background: #fef2d0;              /* 明亮背景色 */
-  border-right: 5px solid gold;     /* 美觀邊框 */
-  padding: 20px;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
+  .sidebar {
+  background-color: #a00;
+  color: white;
+  width: 220px;
+  padding: 10px;
   transition: transform 0.3s ease;
-  transform: translateX(0);         /* 預設展開 */
+  overflow-y: auto;
 }
 
-.sidebar.hidden {
-  transform: translateX(-100%);     /* 收起狀態 */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
 }
 
+.sidebar li {
+  margin: 10px 0;
+  cursor: pointer;
+}
 
     .sidebar button {
       width: 100%;
@@ -482,6 +476,11 @@ img {
     border-bottom: 5px solid gold;
     transform: translateX(-100%);
     position: absolute;
+    height: 100%;
+    z-index: 10;
+  }
+.sidebar.active {
+    transform: translateX(0);
   }
 
   .content {
@@ -506,6 +505,14 @@ img {
   }
 }
 
+/* 桌機版側邊欄切換收合 */
+@media (min-width: 769px) {
+  .sidebar.collapsed {
+    transform: translateX(-100%);
+    position: relative;
+  }
+}
+
   </style>
 </head>
 
@@ -519,8 +526,10 @@ img {
 
   <!-- 首頁與其他頁面 -->
   <div id="main">
-    <div class="container">
-    <div class="menu-button" onclick="toggleSidebar()">☰ 功能選單</div>  
+    <header>
+      <button id="toggleSidebar">☰ 功能選單</button>
+    </header>
+    <div class="container">  
       <div class="sidebar">
         <button onclick="showPage('news')">即時消息</button>
         <button onclick="showPage('promo')">文宣區</button>
@@ -844,7 +853,21 @@ img {
       document.getElementById("main").style.display = "block";
     });
 
-  // 顯示對應頁面
+const toggleButton = document.getElementById('toggleSidebar');
+const sidebar = document.getElementById('sidebar');
+
+function toggleSidebar() {
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) {
+    sidebar.classList.toggle('active');
+  } else {
+    sidebar.classList.toggle('collapsed');
+  }
+}
+
+toggleButton.addEventListener('click', toggleSidebar);
+
+
 function showPage(id) {
   document.querySelectorAll('.page').forEach(page => {
     page.style.display = 'none';
