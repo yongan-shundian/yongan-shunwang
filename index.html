@@ -844,12 +844,20 @@ img {
       document.getElementById("main").style.display = "block";
     });
 
-function showPage(id) {
-  document.querySelectorAll('.page').forEach(page => {
-    page.style.display = 'none';
-  });
-  document.getElementById(id).style.display = 'block';
-}
+  // 功能選單切換控制
+  function toggleSidebar() {
+    document.querySelector(".sidebar").classList.toggle("hidden");
+  }
+
+  // 顯示對應頁面
+  function showPage(pageId) {
+    const pages = document.querySelectorAll(".page");
+    pages.forEach(page => {
+      page.style.display = "none";
+    });
+
+    document.getElementById(pageId).style.display = "block";
+  }
 
     const donors = [
       { name: '曾祥妹', amount: '捌百元' },
@@ -874,10 +882,7 @@ function showPage(id) {
       images[current].classList.add('active');
     }, 3000);
    
-    function toggleSidebar() {
-  const sidebar = document.getElementById('sidebar');
-  sidebar.classList.toggle('hidden');
-}
+
   </script>
 
 </body>
