@@ -50,17 +50,23 @@
       background: linear-gradient(#f5e9d3, #f2dfc2);
     }
 
-   .sidebar {
-  width: clamp(180px, 25%, 220px);  /* 響應式寬度 */
-  background: #fef2d0;              /* 明亮背景色 */
-  border-right: 5px solid gold;     /* 美觀邊框 */
-  padding: 20px;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
+  .sidebar {
+  background-color: #a00;
+  color: white;
+  width: 220px;
+  padding: 10px;
   transition: transform 0.3s ease;
-  transform: translateX(0);         /* 預設展開 */
+  overflow-y: auto;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin: 10px 0;
+  cursor: pointer;
 }
 
     .sidebar button {
@@ -847,12 +853,30 @@ img {
       document.getElementById("main").style.display = "block";
     });
 
-  function showPage(pageId) {
-    const pages = document.querySelectorAll('.page');
-    pages.forEach(page => page.style.display = 'none');
-    document.getElementById(pageId).style.display = 'block';
-  }
+const toggleButton = document.getElementById('toggleSidebar');
+const sidebar = document.getElementById('sidebar');
 
+function toggleSidebar() {
+  const isMobile = window.innerWidth <= 768;
+  if (isMobile) {
+    sidebar.classList.toggle('active');
+  } else {
+    sidebar.classList.toggle('collapsed');
+  }
+}
+
+toggleButton.addEventListener('click', toggleSidebar);
+
+
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(page => {
+    page.style.display = 'none';
+  });
+  const targetPage = document.getElementById(pageId);
+  if(targetPage) {
+   targetPage.style.display = 'block';
+  }
+}
 
     const donors = [
       { name: '曾祥妹', amount: '捌百元' },
