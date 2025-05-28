@@ -38,6 +38,35 @@
       cursor: pointer;
     }
 
+/* 功能選單按鈕 */
+.menu-button {
+  background-color: #a30000;
+  color: white;
+  padding: 10px 16px;
+  font-size: 1em;
+  cursor: pointer;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 2000;
+  border-radius: 8px;
+  box-shadow: 1px 1px 5px #888;
+  display: none; /* 預設隱藏，僅在小螢幕出現 */
+}
+
+/* 側邊欄收起狀態 */
+.sidebar.hidden {
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  position: absolute;
+  z-index: 1000;
+  background: #fef2d0;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+
     #main {
       display: none;
     }
@@ -464,7 +493,14 @@ img {
     border-bottom: 5px solid gold;
     transform: translateX(-100%);
     position: absolute;
+    /* 顯示／隱藏側邊欄的控制（手機版才用得到） */
+  transition: transform 0.3s ease;
+  z-index: 1000;
   }
+
+.sidebar.hidden {
+  transform: translateX(-100%);
+}
 
   .content {
     padding: 20px;
@@ -499,10 +535,13 @@ img {
     <button id="enterButton">進 入 網 站</button>
   </div>
 
+   <!-- 功能選單按鈕 -->
+  <div class="menu-button" id="menuButton">☰ 功能選單</div>
+
   <!-- 首頁與其他頁面 -->
   <div id="main">
     <div class="container">  
-      <div class="sidebar">
+      <div class="sidebar hidden" id="sidebar">
         <button onclick="showPage('news')">即時消息</button>
         <button onclick="showPage('promo')">文宣區</button>
         <button onclick="showPage('gallery')">活動剪影</button>
@@ -514,7 +553,8 @@ img {
         <button onclick="showPage('transport')">交通資訊</button>
         <button onclick="showPage('contact')">聯絡我們</button>
       </div>
-      <div class="content">
+       <!-- 包住內容區，讓點擊時可關閉側邊欄 -->
+      <div class="content" id="mainContent">
         <!-- 首頁 -->
         <div id="home" class="page" style="display: block;">
           <h2>歡迎光臨 永安順王宮</h2>
@@ -854,8 +894,24 @@ img {
       current = (current + 1) % images.length;
       images[current].classList.add('active');
     }, 3000);
-   
 
+       // 功能選單與側邊欄開關
+    const menuButton = document.getElementById('menuButton');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+
+    // 點擊功能選單按鈕 → 顯示或隱藏側邊欄
+    menuButton.addEventListener('click', (e) => {
+      e.stopPropagation(); // 防止點擊事件影響主畫面
+      sidebar.classList.toggle('hidden');
+    });
+
+    // 點擊內容區 → 關閉側邊欄（僅限手機寬度）
+    mainContent.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        sidebar.classList.add('hidden');
+      }
+    });
   </script>
 
 </body>
