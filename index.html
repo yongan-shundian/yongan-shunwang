@@ -68,6 +68,50 @@
       font-size: 1em;
       cursor: pointer;
     }
+    
+    /* 側邊欄可折疊 */
+.sidebar {
+  transition: width 0.3s ease;
+  overflow-x: hidden;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.toggle-sidebar {
+  background-color: #a30000;
+  color: white;
+  border: none;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+/* 功能選單收合 */
+.menu-wrapper {
+  transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .menu-wrapper {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 子選單動畫 */
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  margin-left: 10px;
+}
+
+.submenu.open {
+  max-height: 500px; /* 根據實際需要調整 */
+}
 
     .content {
       flex-grow: 1;
@@ -502,18 +546,28 @@ img {
   <!-- 首頁與其他頁面 -->
   <div id="main">
     <div class="container">  
-      <div class="sidebar">
-        <button onclick="showPage('news')">即時消息</button>
-        <button onclick="showPage('promo')">文宣區</button>
-        <button onclick="showPage('gallery')">活動剪影</button>
-        <button onclick="showPage('team')">人員名單</button>
-        <button onclick="showPage('services')">服務項目</button>
-        <button onclick="showPage('products')">相關商品</button>
-        <button onclick="showPage('donate')">功德流芳</button>
-        <button onclick="showPage('discussion')">留言討論</button>
-        <button onclick="showPage('transport')">交通資訊</button>
-        <button onclick="showPage('contact')">聯絡我們</button>
-      </div>
+      <div class="sidebar" id="sidebar">
+  <button class="toggle-sidebar" id="toggleSidebar">☰ 功能選單</button>
+
+  <div class="menu-wrapper">
+    <button onclick="showPage('news')">即時消息</button>
+
+    <button class="submenu-toggle">文宣區 ▼</button>
+    <div class="submenu">
+      <button onclick="showPage('promo')">文宣下載</button>
+      <button onclick="showPage('gallery')">活動剪影</button>
+    </div>
+
+    <button onclick="showPage('team')">人員名單</button>
+    <button onclick="showPage('services')">服務項目</button>
+    <button onclick="showPage('products')">相關商品</button>
+    <button onclick="showPage('donate')">功德流芳</button>
+    <button onclick="showPage('discussion')">留言討論</button>
+    <button onclick="showPage('transport')">交通資訊</button>
+    <button onclick="showPage('contact')">聯絡我們</button>
+  </div>
+</div>
+
       <div class="content">
         <!-- 首頁 -->
         <div id="home" class="page" style="display: block;">
@@ -820,41 +874,66 @@ img {
   </div>
 
   <script>
-    document.getElementById("enterButton").addEventListener("click", function () {
-      document.getElementById("cover").style.display = "none";
-      document.getElementById("main").style.display = "block";
-    });
+  // 進入網站：封面消失，主頁顯示
+  document.getElementById("enterButton").addEventListener("click", function () {
+    document.getElementById("cover").style.display = "none";
+    document.getElementById("main").style.display = "block";
+  });
 
+  // 切換內容頁面顯示
+  function showPage(pageId) {
+    const pages = document.querySelectorAll('.page');
+    pages.forEach(p => p.style.display = 'none');
+    const target = document.getElementById(pageId);
+    if (target) target.style.display = 'block';
+  }
 
-    function showPage(pageId) {
-      const pages = document.querySelectorAll('.page');
-      pages.forEach(p => p.style.display = 'none');
-      document.getElementById(pageId).style.display = 'block';
-    }
+  // 功德流芳（捐款人）列表渲染
+  const donors = [
+    { name: '曾祥妹', amount: '捌百元' },
+    { name: '吳紅梅', amount: '壹仟元' },
+    { name: '李伯偉', amount: '壹仟元' },
+    { name: '邱湘嵐', amount: '壹仟元' },
+  ];
 
-    const donors = [
-      { name: '曾祥妹', amount: '捌百元' },
-      { name: '吳紅梅', amount: '壹仟元' },
-      { name: '李伯偉', amount: '壹仟元' },
-      { name: '邱湘嵐', amount: '壹仟元' },
-    ];
-
-    const donorList = document.getElementById("donorList");
+  const donorList = document.getElementById("donorList");
+  if (donorList) {
     donors.forEach(donor => {
       const entry = document.createElement("div");
       entry.className = "donor";
       entry.textContent = `${donor.name}　${donor.amount}`;
       donorList.appendChild(entry);
     });
- 
-        let current = 0;
-    const images = document.querySelectorAll('#carousel img');
+  }
+
+  // 圖片輪播
+  const images = document.querySelectorAll('#carousel img');
+  let current = 0;
+  if (images.length > 0) {
     setInterval(() => {
       images[current].classList.remove('active');
       current = (current + 1) % images.length;
       images[current].classList.add('active');
     }, 3000);
-   
+  }
+
+  // 側邊欄開關
+  const sidebarToggle = document.getElementById("toggleSidebar");
+  if (sidebarToggle) {
+    sidebarToggle.addEventListener("click", () => {
+      document.getElementById("sidebar").classList.toggle("collapsed");
+    });
+  }
+
+  // 子選單收合
+  const submenuToggles = document.querySelectorAll(".submenu-toggle");
+  submenuToggles.forEach(toggle => {
+    toggle.addEventListener("click", () => {
+      const submenu = toggle.nextElementSibling;
+      submenu.classList.toggle("open");
+    });
+  });
+
 
   </script>
 
