@@ -51,7 +51,6 @@
   z-index: 2000;
   border-radius: 8px;
   box-shadow: 1px 1px 5px #888;
-  display: none; /* 預設隱藏，僅在小螢幕出現 */
 }
 
 /* 側邊欄收起狀態 */
@@ -493,9 +492,6 @@ img {
     border-bottom: 5px solid gold;
     transform: translateX(-100%);
     position: absolute;
-    /* 顯示／隱藏側邊欄的控制（手機版才用得到） */
-  transition: transform 0.3s ease;
-  z-index: 1000;
   }
 
 .sidebar.hidden {
@@ -904,13 +900,6 @@ img {
     menuButton.addEventListener('click', (e) => {
       e.stopPropagation(); // 防止點擊事件影響主畫面
       sidebar.classList.toggle('hidden');
-    });
-
-    // 點擊內容區 → 關閉側邊欄（僅限手機寬度）
-    mainContent.addEventListener('click', () => {
-      if (window.innerWidth <= 768) {
-        sidebar.classList.add('hidden');
-      }
     });
   </script>
 
