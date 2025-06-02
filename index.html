@@ -40,6 +40,7 @@
 
 /* 功能選單按鈕 */
 .menu-button {
+  display: none;
   background-color: #a30000;
   color: white;
   padding: 10px 16px;
@@ -47,7 +48,7 @@
   cursor: pointer;
   position: fixed;
   top: 10px;
-  left: 10px;
+  left: 20px;
   z-index: 2000;
   border-radius: 8px;
   box-shadow: 1px 1px 5px #888;
@@ -534,7 +535,7 @@ img {
   <!-- 首頁與其他頁面 -->
   <div id="main">
     <!-- 功能選單按鈕 -->
-  <div class="menu-button" id="menuButton">☰ 功能選單</div>
+  <div class="menu-button" id="menuButton">☰</div>
     <div class="container">  
       <div class="sidebar hidden" id="sidebar">
         <button onclick="showPage('news')">即時消息</button>
