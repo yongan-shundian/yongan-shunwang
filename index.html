@@ -531,11 +531,10 @@ img {
     <button id="enterButton">進 入 網 站</button>
   </div>
 
-   <!-- 功能選單按鈕 -->
-  <div class="menu-button" id="menuButton">☰ 功能選單</div>
-
   <!-- 首頁與其他頁面 -->
   <div id="main">
+    <!-- 功能選單按鈕 -->
+  <div class="menu-button" id="menuButton">☰ 功能選單</div>
     <div class="container">  
       <div class="sidebar hidden" id="sidebar">
         <button onclick="showPage('news')">即時消息</button>
@@ -892,9 +891,10 @@ img {
     }, 3000);
 
        // 功能選單與側邊欄開關
-    const menuButton = document.getElementById('menuButton');
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('mainContent');
+ document.getElementById("enterButton").addEventListener("click", function () {
+  document.getElementById("cover").style.display = "none";
+  document.getElementById("main").style.display = "block";
+});
 
     // 點擊功能選單按鈕 → 顯示或隱藏側邊欄
     menuButton.addEventListener('click', (e) => {
