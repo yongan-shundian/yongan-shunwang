@@ -369,6 +369,7 @@ img {
   max-width: 100%;
   height: auto;
 }
+
 /* 功德流芳 */
     h1, h2 {
       color: #a00;
@@ -476,9 +477,11 @@ img {
       gap: 1rem;
     }
     .gallery img {
-      width: 100%;
-      height: auto;
-      border-radius: 8px;
+      width: 1213px;        /* 桌機維持原始寬度 */
+      height: auto;         /* 等比例縮放 */
+      max-width: 100%;      /* 螢幕比 1213px 小時就自動縮小 */
+      display: inline-block;
+      border-radius: 8px;   /* 可有可無：微圓角 */
     }
 
 @media (max-width: 768px) {
